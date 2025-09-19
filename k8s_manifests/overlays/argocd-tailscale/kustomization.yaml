@@ -1,0 +1,59 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: argocd-tailscale
+
+# Include ArgoCD and add Tailscale sidecar
+resources:
+  - ../argocd
+
+# Use manually created secret with actual auth key
+# Create with:
+# kubectl create secret generic tailscale-sidecar-auth -n argocd \
+# --from-literal=authkey="$TAILSCALE_SIDECAR_AUTH_KEY"
+
+# Patch the argocd-server deployment to add Tailscale sidecar
+patches:
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/containers/-
+        value:
+          name: tailscale
+          image: tailscale/tailscale:latest
+          env:
+          - name: TS_AUTHKEY
+            valueFrom:
+              secretKeyRef:
+                name: tailscale-sidecar-auth
+                key: authkey
+          - name: TS_HOSTNAME
+            value: "argocd-gke"
+          - name: TS_STATE_DIR
+            value: /var/lib/tailscale
+          - name: TS_USERSPACE
+            value: "false"
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          volumeMounts:
+          - name: tailscale-state
+            mountPath: /var/lib/tailscale
+          - name: dev-net-tun
+            mountPath: /dev/net/tun
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: tailscale-state
+          emptyDir: {}
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: dev-net-tun
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+    target:
+      kind: Deployment
+      name: argocd-server

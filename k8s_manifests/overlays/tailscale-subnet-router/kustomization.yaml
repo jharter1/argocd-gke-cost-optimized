@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: tailscale-subnet-router
+
+# Create a dedicated namespace for networking
+namespace: tailscale-system
+
+resources:
+  - tailscale-subnet-router.yaml
+
+# Generate secret from environment variable
+secretGenerator:
+  - name: tailscale-auth
+    namespace: tailscale-system
+    literals:
+      - authkey=${TAILSCALE_SUBNET_AUTH_KEY}

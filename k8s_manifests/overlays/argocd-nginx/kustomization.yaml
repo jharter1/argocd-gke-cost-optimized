@@ -4,9 +4,9 @@ kind: Kustomization
 metadata:
   name: argocd-nginx
 
-# Include base ArgoCD and NGINX-specific resources
+# Include ArgoCD and add NGINX ingress
 resources:
-  - ../../base
+  - ../argocd
   - nginx-ingress-controller.yaml
   - nginx-ingress-class.yaml
   - argocd-ingress.yaml

@@ -2,25 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 metadata:
-  name: argocd-base
+  name: base
 
-# Base ArgoCD installation
-resources:
-  - https://raw.githubusercontent.com/argoproj/argo-cd/v2.12.4/manifests/install.yaml
-
-# Common patches that apply to all overlays
-patches:
-  - patch: |-
-      - op: replace
-        path: /spec/type
-        value: ClusterIP
-    target:
-      kind: Service
-      name: argocd-server
-  - patch: |-
-      - op: add
-        path: /spec/template/spec/containers/0/args/-
-        value: --insecure
-    target:
-      kind: Deployment
-      name: argocd-server
+# Empty base - overlays provide specific functionality

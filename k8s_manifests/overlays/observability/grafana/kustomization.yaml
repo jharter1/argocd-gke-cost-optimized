@@ -1,15 +1,15 @@
+---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 metadata:
-  name: argocd-tailscale
+  name: grafana
 
-# Include base ArgoCD
+namespace: observability
+
 resources:
-  - ../../base
-  - tailscale-secret.yaml
+  - grafana-deployment.yaml
 
-# Patch the argocd-server deployment to add Tailscale sidecar
 patches:
   - patch: |-
       - op: add
@@ -21,10 +21,10 @@ patches:
           - name: TS_AUTHKEY
             valueFrom:
               secretKeyRef:
-                name: tailscale-auth
+                name: tailscale-grafana-auth
                 key: authkey
           - name: TS_HOSTNAME
-            value: "argocd-gke"
+            value: "grafana-gke"
           - name: TS_STATE_DIR
             value: /var/lib/tailscale
           - name: TS_USERSPACE
@@ -51,4 +51,4 @@ patches:
             type: CharDevice
     target:
       kind: Deployment
-      name: argocd-server
+      name: grafana

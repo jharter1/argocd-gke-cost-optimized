@@ -39,10 +39,14 @@ logs/
 .env.local
 .env.*.local
 
+# Shell-specific environment helpers
+*.fish
+
 # Kubernetes sensitive data
 kubeconfig
 *.kubeconfig
 secrets.yaml
+tailscale-secret.yaml
 
 # GitHub Actions artifacts
 .github/workflows/artifacts/
