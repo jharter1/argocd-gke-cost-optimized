@@ -1,0 +1,48 @@
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform/
+.terraform.lock.hcl
+terraform.log
+crash.log
+crash.*.log
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Kubernetes sensitive data
+kubeconfig
+*.kubeconfig
+secrets.yaml
+
+# GitHub Actions artifacts
+.github/workflows/artifacts/

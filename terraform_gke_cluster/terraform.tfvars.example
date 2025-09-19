@@ -1,0 +1,15 @@
+# Auto-create ArgoCD project with unique ID
+project_id      = ""  # Leave empty to auto-generate: argocd-dev-[random]
+project_name    = "ArgoCD Development" 
+create_project  = true
+billing_account = "017F23-ED7E5E-37C2E8"
+
+# Optional: If you have a domain for Cloud Identity organization
+# domain_name = "yourdomain.com"  # Uncomment and set your domain
+
+# Cluster configuration
+region       = "us-central1"
+zone         = "us-central1-a" 
+cluster_name = "dev-argocd-cluster"
+node_count   = 2
+machine_type = "e2-medium"
