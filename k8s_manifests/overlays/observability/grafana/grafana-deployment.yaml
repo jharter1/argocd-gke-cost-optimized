@@ -14,6 +14,7 @@ spec:
       labels:
         app: grafana
     spec:
+      serviceAccountName: grafana
       containers:
       - name: grafana
         image: grafana/grafana:10.1.0
@@ -62,3 +63,33 @@ data:
       access: proxy
       url: http://prometheus-service:9090
       isDefault: true
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: grafana
+  namespace: observability
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: grafana
+rules:
+- apiGroups: [""]
+  resources:
+  - secrets
+  - events
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: grafana
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: grafana
+subjects:
+- kind: ServiceAccount
+  name: grafana
+  namespace: observability
