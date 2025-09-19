@@ -1,0 +1,54 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: loki
+
+namespace: observability
+
+resources:
+  - loki-deployment.yaml
+
+patches:
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/containers/-
+        value:
+          name: tailscale
+          image: tailscale/tailscale:latest
+          env:
+          - name: TS_AUTHKEY
+            valueFrom:
+              secretKeyRef:
+                name: tailscale-loki-auth
+                key: authkey
+          - name: TS_HOSTNAME
+            value: "loki-gke"
+          - name: TS_STATE_DIR
+            value: /var/lib/tailscale
+          - name: TS_USERSPACE
+            value: "false"
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          volumeMounts:
+          - name: tailscale-state
+            mountPath: /var/lib/tailscale
+          - name: dev-net-tun
+            mountPath: /dev/net/tun
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: tailscale-state
+          emptyDir: {}
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: dev-net-tun
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
+    target:
+      kind: Deployment
+      name: loki

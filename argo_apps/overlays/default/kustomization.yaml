@@ -12,4 +12,5 @@ resources:
   - ../../base
   - prometheus.yaml
   - grafana.yaml
+  - loki.yaml
   - argo-apps.yaml
