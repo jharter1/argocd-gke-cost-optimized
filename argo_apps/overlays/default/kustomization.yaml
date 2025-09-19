@@ -13,3 +13,4 @@ resources:
   - prometheus.yaml
   - grafana.yaml
   - loki.yaml
+  - tailscale-operator.yaml
