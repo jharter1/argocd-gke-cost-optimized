@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: argocd-nginx
+
+# Include base ArgoCD and NGINX-specific resources
+resources:
+  - ../../base
+  - nginx-ingress-controller.yaml
+  - nginx-ingress-class.yaml
+  - argocd-ingress.yaml
