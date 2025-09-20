@@ -10,3 +10,6 @@ namespace: tailscale
 resources:
   - tailscale-operator.yaml
   - operator-oauth-secret.yaml
+
+patchesStrategicMerge:
+  - operator-no-tags-patch.yaml
