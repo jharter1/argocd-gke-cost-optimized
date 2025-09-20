@@ -11,6 +11,6 @@ spec:
       - name: operator
         env:
         - name: OPERATOR_INITIAL_TAGS
-          $patch: delete
+          value: ""
         - name: PROXY_TAGS
-          $patch: delete
+          value: ""
